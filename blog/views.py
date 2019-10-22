@@ -18,9 +18,12 @@ def token(request):
 
 def signup(request):
     if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        username = req_data['username']
-        password = req_data['password']
+        try:
+            req_data = json.loads(request.body.decode())
+            username = req_data['username']
+            password = req_data['password']
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest()
         User.objects.create_user(username=username, password=password)
         return HttpResponse(status=201)
     else:
@@ -28,9 +31,12 @@ def signup(request):
 
 def signin(request):
     if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        username = req_data['username']
-        password = req_data['password']
+        try:
+            req_data = json.loads(request.body.decode())
+            username = req_data['username']
+            password = req_data['password']
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest()
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
@@ -119,7 +125,7 @@ def comment_detail(request, comment_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
             comment = get_object_or_404(Comment, pk=comment_id)
-            return JsonResponse(model_to_dict(article))
+            return JsonResponse(model_to_dict(comment))
         else:
             return HttpResponse(status=401)
 
