@@ -154,7 +154,7 @@ class BlogTestCase(TestCase):
         #starts here
         test_user = User.objects.create_user(username='testusername', password='testpassword')
         test_article = Article.objects.create(title='test_title', content='test_content', author=test_user)
-        test_comment = Comment.objects.create(article=test_article, content='test_content', author=test_user)
+        Comment.objects.create(article=test_article, content='test_content', author=test_user)
         response = client.put('/api/article/1/', json.dumps({'username': 'chris', 'password': 'chris'}), 
                                content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 403)
@@ -180,7 +180,7 @@ class BlogTestCase(TestCase):
         #starts here
         test_user = authenticate(username='chris', password='chris')
         test_article = Article.objects.create(title='test_title', content='test_content', author=test_user)
-        test_comment = Comment.objects.create(article=test_article, content='test_content', author=test_user)
+        Comment.objects.create(article=test_article, content='test_content', author=test_user)
         response = client.post('/api/signup/', json.dumps({'x': 'chris', 'y': 'chris'}), 
                                content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 400)
@@ -257,7 +257,6 @@ class BlogTestCase(TestCase):
         self.assertEqual(response.json()['author'], test_user.id)
         
         response = client.get('/api/article/1/comment/', HTTP_X_CSRFTOKEN=csrftoken)
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
         self.assertIsInstance(response.json()[0]['id'], int)

@@ -60,7 +60,7 @@ def article(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             article_all_list = [model_to_dict(article) for article in Article.objects.all()]
-            return JsonResponse(article_all_list, safe=False)
+            return JsonResponse(article_all_list, safe=False, status=200)
         else:
             return HttpResponse(status=401)
     elif request.method == 'POST':
@@ -85,7 +85,7 @@ def article_detail(request, article_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
             article = get_object_or_404(Article, pk=article_id)
-            return JsonResponse(model_to_dict(article))
+            return JsonResponse(model_to_dict(article), status=200)
         else:
             return HttpResponse(status=401)
 
@@ -125,7 +125,7 @@ def comment_detail(request, comment_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
             comment = get_object_or_404(Comment, pk=comment_id)
-            return JsonResponse(model_to_dict(comment))
+            return JsonResponse(model_to_dict(comment), status=200)
         else:
             return HttpResponse(status=401)
 
@@ -164,7 +164,7 @@ def article_comment(request, article_id):
         if request.user.is_authenticated:
             article = get_object_or_404(Article, pk=article_id)
             comment_all_list = [model_to_dict(comment) for comment in article.comment_set.all()]
-            return JsonResponse(comment_all_list, safe=False)
+            return JsonResponse(comment_all_list, safe=False, status=200)
         else:
             return HttpResponse(status=401)
             
