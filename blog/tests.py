@@ -213,6 +213,7 @@ class BlogTestCase(TestCase):
         #starts here
         response = client.get('/api/article/', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 0)
 
         test_user = authenticate(username='chris', password='chris')
 
