@@ -244,6 +244,10 @@ class BlogTestCase(TestCase):
         self.assertEqual(response.json()['title'], 'chrispy')
         self.assertEqual(response.json()['content'], 'doughnut')
 
+        response = client.get('/api/article/1/comment/', HTTP_X_CSRFTOKEN=csrftoken)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 0)
+
         response = client.post('/api/article/1/comment/', json.dumps({'content': 'chris_domatix is here'}), 
                                content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 201)
@@ -253,6 +257,8 @@ class BlogTestCase(TestCase):
         
         response = client.get('/api/article/1/comment/', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
         self.assertIsInstance(response.json()[0]['id'], int)
         self.assertEqual(response.json()[0]['article'], test_articles['id'])
         self.assertEqual(response.json()[0]['content'], 'chris_domatix is here')
