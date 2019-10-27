@@ -1,5 +1,5 @@
 from django.urls import path
-from blog import views, views
+from blog import views
 
 urlpatterns = [
     path('token/', views.token, name='token'),
